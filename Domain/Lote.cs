@@ -13,7 +13,7 @@ namespace Domain
         public DateTime? DataFim { get; set; }
         public int Quantidade { get; set; }
         public int FkEvento { get; set; }
-        public Evento Evento { get; set; }
+        public Evento Evento { get;  }
 
     }
 }

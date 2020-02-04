@@ -8,7 +8,7 @@
         public int? FkEvento { get; set; }
         public int? FkPalestrante { get; set; }
 
-        public Evento Evento { get; set; }
-        public Palestrante Palestrante { get; set; }
+        public Evento Evento { get;  }
+        public Palestrante Palestrante { get; }
     }
 }

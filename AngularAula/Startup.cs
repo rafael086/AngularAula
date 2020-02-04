@@ -23,10 +23,13 @@ namespace AngularAula
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("Conexao")));
-            services.AddControllers();
+            services.AddScoped<IDataRepository, DataRepository>();
+            services.AddControllers().AddNewtonsoftJson(options =>
+     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+ );
             services.AddCors();
             // In production, the Angular files will be served from this directory
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,7 +39,7 @@ namespace AngularAula
             {
                 app.UseDeveloperExceptionPage();
             }
- 
+
 
             app.UseHttpsRedirection();
 
@@ -54,7 +57,7 @@ namespace AngularAula
                 //    pattern: "api/{controller}/{action=Index}/{id?}");
             });
 
-         
+
         }
     }
 }
