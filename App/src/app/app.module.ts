@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import {ModalModule, BsDropdownModule, TooltipModule} from 'ngx-bootstrap';
+import {ModalModule, BsDropdownModule, TooltipModule, BsDatepickerModule} from 'ngx-bootstrap';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -31,6 +31,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       BsDropdownModule.forRoot(),
       TooltipModule.forRoot(),
       ModalModule.forRoot(),
+      BsDatepickerModule.forRoot(),
+      ReactiveFormsModule,
       RouterModule.forRoot([
          { path: '', component: HomeComponent, pathMatch: 'full' },
       ])

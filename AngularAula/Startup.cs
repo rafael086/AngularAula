@@ -47,7 +47,7 @@ namespace AngularAula
             app.UseRouting();
 
             app.UseAuthorization();
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyMethod());
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {

@@ -4,6 +4,5 @@ export interface RedeSocial {
     URL: string;
     FkEvento?: number;
     FkPalestrante?: number;
-
 }
 

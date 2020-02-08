@@ -14,6 +14,7 @@ namespace Repository
         public DataRepository(DataContext dataContext)
         {
             _dataContext = dataContext;
+            _dataContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
         public void Add<T>(T entidade) where T : class
         {

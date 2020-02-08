@@ -87,7 +87,7 @@ namespace AngularAula.Controllers
                     return Created($"/api/evento/{evento.Id}", evento);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Deu erro");
             }
