@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AngularAula.DTO;
+using AutoMapper;
 using Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,8 +16,10 @@ namespace AngularAula.Controllers
     public class EventoController : ControllerBase
     {
         private readonly IDataRepository _dataRepository;
-        public EventoController(IDataRepository dataRepository)
+        private readonly IMapper _mapper;
+        public EventoController(IDataRepository dataRepository, IMapper mapper)
         {
+            _mapper = mapper;
             _dataRepository = dataRepository;
         }
         [HttpGet]
@@ -21,7 +27,7 @@ namespace AngularAula.Controllers
         {
             try
             {
-                return Ok(await _dataRepository.GetAllEventosAsync(true));
+                return Ok(_mapper.Map<IEnumerable<EventoDTO>>(await _dataRepository.GetAllEventosAsync(true)));
             }
             catch (Exception)
             {
@@ -34,7 +40,8 @@ namespace AngularAula.Controllers
         {
             try
             {
-                return Ok(await _dataRepository.GetEventosByIdAsync(id, true));
+                var x = _mapper.Map<EventoDTO>(await _dataRepository.GetEventosByIdAsync(id, true));
+                return Ok(x);
             }
             catch (Exception)
             {
@@ -57,13 +64,14 @@ namespace AngularAula.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> Post(Evento evento)
+        public async Task<IActionResult> Post(EventoDTO evento)
         {
             try
             {
-                _dataRepository.Add(evento);
+                var model = _mapper.Map<Evento>(evento);
+                _dataRepository.Add(model);
                 if (await _dataRepository.SaveChangesAsync())
-                    return Created($"/api/evento/{evento.Id}", evento);
+                    return Created($"/api/evento/{evento.Id}", _mapper.Map<EventoDTO>(model));
             }
             catch (Exception)
             {
@@ -74,17 +82,18 @@ namespace AngularAula.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Evento evento)
+        public async Task<IActionResult> Put(int id, EventoDTO evento)
         {
             try
             {
                 var eventoLoc = await _dataRepository.GetEventosByIdAsync(id, false);
                 if (eventoLoc == null)
                     return NotFound();
-                _dataRepository.Update(evento);
+                _mapper.Map(evento, eventoLoc);
+                _dataRepository.Update(eventoLoc);
                 if (await _dataRepository.SaveChangesAsync())
                 {
-                    return Created($"/api/evento/{evento.Id}", evento);
+                    return Created($"/api/evento/{evento.Id}", _mapper.Map<EventoDTO>(eventoLoc));
                 }
             }
             catch (Exception e)

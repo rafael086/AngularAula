@@ -39,7 +39,7 @@ namespace Repository
             IQueryable<Evento> query = _dataContext.Eventos.Include(x => x.Lotes).Include(x => x.RedeSociais);
             if (includePalestra)
                 query = query.Include(p => p.PalestranteEventos).ThenInclude(x => x.Palestrante);
-            query.OrderByDescending(x => x.DataEvento);
+            query.OrderByDescending(x => x.Id);
             return query;
         }
 
