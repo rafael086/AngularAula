@@ -22,6 +22,7 @@ export class EventosComponent implements OnInit {
   ) {
     this.localeService.use('pt-br');
   }
+  titulo = 'Eventos';
   eventos: Evento[];
   evento: Evento;
   imagemLargura = 50;
