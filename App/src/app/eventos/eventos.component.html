@@ -36,7 +36,7 @@
       <td>
         <img
           *ngIf="mostrarImagem"
-          src="https://localhost:44321/Images/{{ evento.imagemURL }}"
+          src="https://localhost:44321/Resources/Images/{{ evento.imagemURL }}"
           alt=""
           [style.width.px]="imagemLargura"
           [style.margin.px]="imagemMargem"
@@ -44,7 +44,7 @@
       </td>
       <td>{{ evento.tema }}</td>
       <td>{{ evento.local }}</td>
-      <td>{{ evento.dataEvento}}</td>
+      <td>{{ evento.dataEvento }}</td>
       <td>{{ evento.qtdPessoas }}</td>
       <td>
         <div *ngIf="!evento.lotes.length">
@@ -63,7 +63,11 @@
           >
             <i class="fas fa-edit"></i>
           </button>
-          <button class="btn btn-sm btn-danger" tooltip="Excluir" (click)="excluirEvento(evento,confirm)">
+          <button
+            class="btn btn-sm btn-danger"
+            tooltip="Excluir"
+            (click)="excluirEvento(evento, confirm)"
+          >
             <i class="fas fa-eraser"></i>
           </button>
         </div>
@@ -192,17 +196,29 @@
             </div>
             <div class="form-group col-md-9">
               <label>Imagem</label>
-              <input
-                type="text"
-                class="form-control is-invalid"
-                [ngClass]="{
-                  'is-invalid':
-                    registerForm.get('imagemURL').errors &&
-                    registerForm.get('imagemURL').touched
-                }"
-                formControlName="imagemURL"
-                placeholder=""
-              />
+              <table>
+                <tr>
+                  <td>
+                    <button class="btn btn-success" (click)="file.click()">
+                      Enviar imagem
+                    </button>
+                    <input
+                      type="file"
+                      #file
+                      (change)="onFileChange($event)"
+                      class="form-control is-invalid d-none"
+                      [ngClass]="{
+                        'is-invalid':
+                          registerForm.get('imagemURL').errors &&
+                          registerForm.get('imagemURL').touched
+                      }"
+                      formControlName="imagemURL"
+                      placeholder=""
+                    />
+                  </td>
+                </tr>
+              </table>
+
               <div class="invalid-feedback">
                 Imagem é obrigatorio
               </div>
@@ -294,8 +310,20 @@
         <p>{{ bodyDeletarEvento }}</p>
       </div>
       <div class="modal-footer  btn-group d-flex">
-        <button type="button" class="btn btn-outline-primary" (click)="confirm.hide()">Não</button>
-        <button type="button" class="btn btn-outline-danger" (click)="confirmeDelete(confirm)">Sim</button>
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="confirm.hide()"
+        >
+          Não
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          (click)="confirmeDelete(confirm)"
+        >
+          Sim
+        </button>
       </div>
     </div>
   </div>

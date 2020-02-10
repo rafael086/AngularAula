@@ -32,6 +32,9 @@ export class EventosComponent implements OnInit {
   eventosFiltrados: Evento[];
   registerForm: FormGroup;
   tipoOperacao: TipoOperacao;
+
+  file: File;
+
   _filtroLista: string;
 
   get filtroLista(): string {
@@ -88,6 +91,7 @@ export class EventosComponent implements OnInit {
     this.tipoOperacao = TipoOperacao.Editar;
     this.openModal(template);
     this.evento = evento;
+    evento.imagemURL = '';
     this.registerForm.patchValue(evento);
   }
 
@@ -113,10 +117,29 @@ export class EventosComponent implements OnInit {
     });
   }
 
+  onFileChange(event) {
+    const reader = new FileReader();
+    if (event.target.files && event.target.files.length) {
+      this.file = event.target.files;
+      console.log(this.file);
+    }
+  }
+
+  uploadImagem() {
+    this.eventoService.postUpload(this.file).subscribe();
+
+    const nomeArquivo = this.evento.imagemURL.split('\\', 3);
+
+    this.evento.imagemURL = nomeArquivo[2];
+  }
+
   salvarAlteracao(template: any) {
     if (this.registerForm.valid) {
       if (this.tipoOperacao === TipoOperacao.Novo) {
         this.evento = Object.assign({}, this.registerForm.value);
+
+        this.uploadImagem();
+
         this.eventoService.postEvento(this.evento).subscribe((ev: Evento) => {
           console.log(ev);
           template.hide();
@@ -128,6 +151,7 @@ export class EventosComponent implements OnInit {
         });
       } else {
         this.evento = Object.assign({ id: this.evento.id }, this.registerForm.value);
+        this.uploadImagem();
         this.eventoService.putEvento(this.evento).subscribe((ev: Evento) => {
           console.log(ev);
           template.hide();
