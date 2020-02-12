@@ -28,10 +28,12 @@ export class EventosComponent implements OnInit {
   imagemLargura = 50;
   imagemMargem = 2;
   mostrarImagem = false;
+  dataAtual: string;
   bodyDeletarEvento = '';
   eventosFiltrados: Evento[];
   registerForm: FormGroup;
   tipoOperacao: TipoOperacao;
+  nomeArquivoAtualizacao: string;
 
   file: File;
 
@@ -90,9 +92,10 @@ export class EventosComponent implements OnInit {
   editarEvento(evento: Evento, template: any) {
     this.tipoOperacao = TipoOperacao.Editar;
     this.openModal(template);
-    this.evento = evento;
-    evento.imagemURL = '';
-    this.registerForm.patchValue(evento);
+    this.evento = Object.assign({}, evento);
+    this.evento.imagemURL = '';
+    this.registerForm.patchValue(this.evento);
+    this.nomeArquivoAtualizacao = evento.imagemURL.toString();
   }
 
   novoEvento(template: any) {
@@ -126,11 +129,20 @@ export class EventosComponent implements OnInit {
   }
 
   uploadImagem() {
-    this.eventoService.postUpload(this.file).subscribe();
-
-    const nomeArquivo = this.evento.imagemURL.split('\\', 3);
-
-    this.evento.imagemURL = nomeArquivo[2];
+    if (this.tipoOperacao === TipoOperacao.Novo) {
+      const nomeArquivo = this.evento.imagemURL.split('\\', 3);
+      this.evento.imagemURL = nomeArquivo[2];
+      this.eventoService.postUpload(this.file, nomeArquivo[2]).subscribe(() => {
+        this.dataAtual = new Date().getDate().toString();
+        this.getEventos();
+      });
+    } else {
+      this.evento.imagemURL = this.nomeArquivoAtualizacao;
+      this.eventoService.postUpload(this.file, this.nomeArquivoAtualizacao).subscribe(() => {
+        this.dataAtual = new Date().getMilliseconds().toString();
+        this.getEventos();
+      });
+    }
   }
 
   salvarAlteracao(template: any) {

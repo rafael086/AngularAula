@@ -36,7 +36,7 @@
       <td>
         <img
           *ngIf="mostrarImagem"
-          src="https://localhost:44321/Resources/Images/{{ evento.imagemURL }}"
+          src="https://localhost:44321/Resources/Images/{{ evento.imagemURL }}?_ts={{dataAtual}}"
           alt=""
           [style.width.px]="imagemLargura"
           [style.margin.px]="imagemMargem"
