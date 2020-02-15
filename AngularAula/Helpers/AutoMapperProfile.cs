@@ -1,6 +1,7 @@
 ﻿using AngularAula.DTO;
 using AutoMapper;
 using Domain;
+using Domain.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,9 @@ namespace AngularAula.Helpers
                 opt => { opt.MapFrom(src => src.PalestranteEventos.Select(x => x.Evento).ToList()); }).ReverseMap();
             CreateMap<RedeSocial, RedeSocialDTO>().ReverseMap();
             CreateMap<Lote, LoteDTO>().ReverseMap();
+
+            CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<User, UserLoginDTO>().ReverseMap();
 
         }
     }
