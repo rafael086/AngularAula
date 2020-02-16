@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import {ModalModule, BsDropdownModule, TooltipModule} from 'ngx-bootstrap';
-import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
+import { ModalModule, BsDropdownModule, TooltipModule } from 'ngx-bootstrap';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -14,9 +14,15 @@ import { PalestranteComponent } from './palestrante/palestrante.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ContatosComponent } from './contatos/contatos.component';
 import { TituloComponent } from './_shared/titulo/titulo.component';
+
 import { DateTimeFormatPipePipe } from './_helps/DateTimeFormatPipe.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {ToastrModule} from 'ngx-toastr';
+import { ToastrModule } from 'ngx-toastr';
+import { UserComponent } from './user/user.component';
+import { LoginComponent } from './user/login/login.component';
+import { RegistrationComponent } from './user/registration/registration.component';
+import { AuthGuard } from './auth/auth.guard';
+import { AuthInterceptor } from './auth/auth.interceptor';
 
 
 
@@ -30,7 +36,10 @@ import {ToastrModule} from 'ngx-toastr';
       PalestranteComponent,
       DashboardComponent,
       ContatosComponent,
-      TituloComponent
+      TituloComponent,
+      UserComponent,
+      LoginComponent,
+      RegistrationComponent
    ],
    imports: [
       BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -47,17 +56,27 @@ import {ToastrModule} from 'ngx-toastr';
       }),
       BsDatepickerModule.forRoot(),
       ReactiveFormsModule,
-      
       RouterModule.forRoot([
-         { path: 'eventos', component: EventosComponent, pathMatch: 'full' },
-         { path: 'palestrantes', component: PalestranteComponent, pathMatch: 'full' },
-         { path: 'dashboard', component: DashboardComponent, pathMatch: 'full' },
-         { path: 'contatos', component: ContatosComponent, pathMatch: 'full' },
+         {
+            path: 'user', component: UserComponent,
+            children: [
+               { path: 'login', component: LoginComponent },
+               { path: 'registration', component: RegistrationComponent },
+            ]
+         },
+         { path: 'eventos', component: EventosComponent, pathMatch: 'full', canActivate: [AuthGuard] },
+         { path: 'palestrantes', component: PalestranteComponent, pathMatch: 'full', canActivate: [AuthGuard] },
+         { path: 'dashboard', component: DashboardComponent, pathMatch: 'full', canActivate: [AuthGuard] },
+         { path: 'contatos', component: ContatosComponent, pathMatch: 'full', canActivate: [AuthGuard] },
          { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
          { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
       ])
    ],
-   providers: [],
+   providers: [{
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+   }],
    bootstrap: [AppComponent]
 })
 export class AppModule { }
