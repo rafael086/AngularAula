@@ -1,5 +1,5 @@
 
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark" *ngIf="showMenu()">
     <div class="container">
     <a class="navbar-brand" routerLink="dashboard">Navbar</a>
     <button
@@ -39,7 +39,7 @@
       <li class="nav-item dropdown" dropdown>
         <a dropdownToggle class="nav-link dropdown-toggle"  id="navbarDropdownMenuLink" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
-          {{authService.decodedToken?.unique_name}}
+          {{userName()}}
         </a>
         <div *dropdownMenu class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" >

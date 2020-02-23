@@ -28,4 +28,12 @@ export class NavComponent implements OnInit {
     this.router.navigate(['/user/login']);
     this.toatr.show('Log out');
   }
+
+  userName() {
+    return sessionStorage.getItem('username');
+  }
+
+  showMenu() {
+    return this.router.url !== '/user/login';
+  }
 }

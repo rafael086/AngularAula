@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using AngularAula.DTO;
@@ -113,10 +114,33 @@ namespace AngularAula.Controllers
             try
             {
                 var eventoLoc = await _dataRepository.GetEventosByIdAsync(id, false);
+                
                 if (eventoLoc == null)
                     return NotFound();
+                
+                var idLotes = evento?.Lotes.Select(x => x.Id);
+                var idRedes = evento?.RedesSociais.Select(x => x.Id);
+                
+                IEnumerable<Lote> lotes =null;
+                IEnumerable<RedeSocial> redes =null;
+                
+                if (idLotes != null && idLotes.Any())
+                    lotes = eventoLoc.Lotes.Where(x => !idLotes.Contains(x.Id));
+                
+                if (idRedes != null && idRedes.Any())
+                    redes = eventoLoc.RedesSociais.Where(x => !idRedes.Contains(x.Id));
+
+                if (lotes != null)
+                    _dataRepository.Delete(lotes);
+
+                if (redes != null)
+                    _dataRepository.Delete(redes);
+
                 _mapper.Map(evento, eventoLoc);
                 _dataRepository.Update(eventoLoc);
+                
+
+
                 if (await _dataRepository.SaveChangesAsync())
                 {
                     return Created($"/api/evento/{evento.Id}", _mapper.Map<EventoDTO>(eventoLoc));

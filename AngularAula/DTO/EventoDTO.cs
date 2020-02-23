@@ -34,7 +34,7 @@ namespace AngularAula.DTO
         public string Email { get; set; }
 
         public List<LoteDTO> Lotes { get; set; }
-        public List<RedeSocialDTO> RedeSociais { get; set; }
+        public List<RedeSocialDTO> RedesSociais { get; set; }
         public List<PalestranteDTO> Palestrantes { get; set; }
 
     }

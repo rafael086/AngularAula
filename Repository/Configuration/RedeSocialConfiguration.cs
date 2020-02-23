@@ -12,7 +12,7 @@ namespace Repository.Configuration
         public void Configure(EntityTypeBuilder<RedeSocial> builder)
         {
             builder.HasOne(x => x.Evento)
-                .WithMany(x => x.RedeSociais)
+                .WithMany(x => x.RedesSociais)
                 .HasForeignKey(x => x.FkEvento);
 
             builder.HasOne(x => x.Palestrante)

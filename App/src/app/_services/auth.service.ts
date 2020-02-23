@@ -21,6 +21,7 @@ export class AuthService {
         if (user) {
           localStorage.setItem('token', user.token);
           this.decodedToken = this.jwtHelper.decodeToken(user.token);
+          sessionStorage.setItem('username', this.decodedToken.unique_name);
         }
       })
     );
@@ -34,4 +35,9 @@ export class AuthService {
     const token = localStorage.getItem('token');
     return !this.jwtHelper.isTokenExpired(token);
   }
+
+  limpaToken(){
+    localStorage.clear();
+  }
+
 }

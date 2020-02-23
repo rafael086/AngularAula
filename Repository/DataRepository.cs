@@ -25,6 +25,13 @@ namespace Repository
         {
             _dataContext.Remove(entidade);
         }
+
+        public void Delete<T>(IEnumerable<T> entidade) where T : class
+        {
+                _dataContext.RemoveRange(entidade);
+
+        }
+
         public void Update<T>(T entidade) where T : class
         {
             _dataContext.Update(entidade);
@@ -36,7 +43,7 @@ namespace Repository
 
         private IQueryable<Evento> RetornaComPalestra(bool includePalestra)
         {
-            IQueryable<Evento> query = _dataContext.Eventos.Include(x => x.Lotes).Include(x => x.RedeSociais);
+            IQueryable<Evento> query = _dataContext.Eventos.Include(x => x.Lotes).Include(x => x.RedesSociais);
             if (includePalestra)
                 query = query.Include(p => p.PalestranteEventos).ThenInclude(x => x.Palestrante);
             query.OrderByDescending(x => x.Id);
@@ -48,11 +55,11 @@ namespace Repository
             return await RetornaComPalestra(includePalestra).ToArrayAsync();
         }
 
-        
+
 
         public async Task<Evento[]> GetEventoByTemaAsync(string tema, bool includePalestra = false)
         {
-           return await RetornaComPalestra(includePalestra).Where(x => x.Tema.ToLower().Contains(tema.ToLower())).ToArrayAsync();
+            return await RetornaComPalestra(includePalestra).Where(x => x.Tema.ToLower().Contains(tema.ToLower())).ToArrayAsync();
         }
 
         public async Task<Evento> GetEventosByIdAsync(int id, bool includePalestra = false)
@@ -69,7 +76,7 @@ namespace Repository
             return query;
         }
 
-        public async Task<Palestrante> GetPalestranteByIdAsync(int id, bool includeEvento= false)
+        public async Task<Palestrante> GetPalestranteByIdAsync(int id, bool includeEvento = false)
         {
             return await GetPalestranteComEvento(includeEvento).FirstOrDefaultAsync(x => x.Id == id);
         }

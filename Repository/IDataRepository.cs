@@ -11,6 +11,7 @@ namespace Repository
         void Add<T>(T entidade) where T : class;
         void Update<T>(T entidade) where T : class;
         void Delete<T>(T entidade) where T : class;
+        void Delete<T>(IEnumerable<T> entidade) where T : class;
         Task<bool> SaveChangesAsync();
 
         Task<Evento[]> GetEventoByTemaAsync(string tema, bool includePalestra);
